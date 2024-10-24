@@ -1,0 +1,72 @@
+CREATE DATABASE DB_VENDAS;
+USE DB_VENDAS;
+
+-- Criando a tabela Clientes
+CREATE TABLE Clientes (
+    cod INT PRIMARY KEY,
+    nome VARCHAR(100),
+    cidade VARCHAR(100)
+);
+
+-- Inserindo dados na tabela Clientes
+INSERT INTO Clientes (cod, nome, cidade) VALUES
+(1, 'Maria', 'São Paulo'),
+(2, 'João', 'Rio de Janeiro'),
+(3, 'Ana', 'Belo Horizonte');
+
+-- Criando a tabela Pedidos
+CREATE TABLE Pedidos (
+    cod INT PRIMARY KEY,
+    valor DECIMAL(10, 2),
+    data DATE,
+    cod_cliente INT,
+    FOREIGN KEY (cod_cliente) REFERENCES Clientes(cod)
+);
+
+-- Inserindo dados na tabela Pedidos
+INSERT INTO Pedidos (cod, valor, data, cod_cliente) VALUES
+(1, 150.28, '2023-10-10', 1),
+(2, 300.00, '2023-07-11', 2),
+(3, 33.33, '2023-10-12', 3);
+
+-- Exercícios:
+-- 1- insira pelo menos mais 7 registros em cada tabela;
+
+insert into Pedidos (cod, valor, data, cod_cliente) values
+(4, 500.00, '2023-10-13', 4),
+(5, 576.99, '2023-07-14', 5),
+(6, 600.00, '2023-10-15', 6),
+(7, 52.00, '2023-09-16', 7),
+(8, 15.00, '2023-10-17', 8),
+(9, 113.00,'2023--18', 9),
+(10, 810.50, '2023-10-19', 10);
+
+insert into Clientes (cod, nome, cidade) values
+(4, 'Beatriz', 'Sorocaba'),
+(5, 'Júlia', 'Votorantim'),
+(6, 'Thais', 'Pindamonhangaba'),
+(7, 'Nathalia', 'Itu'),
+(8, 'Isabela', 'Diadema'),
+(9, 'Luany', 'Ipero'),
+(10, 'Miguel', 'Boituva');
+
+-- 2-Liste todos os clientes que fizeram pedidos, mostrando o nome do cliente, a cidade e o valor do pedido.
+select nome, cidade, valor from Clientes inner join Pedidos on Clientes.cod = Pedidos.cod_cliente;
+
+-- 3-Liste todos os clientes, mostrando o nome e o valor do pedido, mesmo que não tenham feito nenhum pedido.  
+select nome, valor from Clientes left join Pedidos on Clientes.cod = Pedidos.cod_cliente;
+
+-- 4-Liste todos os pedidos, incluindo os clientes correspondentes, mesmo que alguns clientes não tenham feito pedidos.  
+select nome, valor, pedidos.cod as TodosPedidos from Clientes left join Pedidos on Clientes.cod = Pedidos.cod_cliente;
+
+-- 5-Liste todos os clientes que ainda não fizeram nenhum pedido.
+select nome from Clientes left join Pedidos on Clientes.cod = Pedidos.cod_cliente where pedidos.cod is null;
+
+-- 6-Liste todos os pedidos com valor acima de R$ 200,00, mostrando o nome do cliente e o valor do pedido. 
+select nome, valor from Clientes left join Pedidos on Clientes.cod = Pedidos.cod_cliente where valor > 200.00;
+
+-- 7-Liste todos os pedidos feitos no mês de outubro de 2023, mostrando o nome do cliente e o valor do pedido.
+select nome, valor from Clientes left join Pedidos on Clientes.cod = Pedidos.cod_cliente where data between '2023-10-10' and '2023-10-19';
+
+
+
